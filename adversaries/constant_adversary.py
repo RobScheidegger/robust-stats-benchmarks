@@ -4,7 +4,7 @@ import numpy as np
 INFINITY = 10**10
 
 
-class InfinityAdversary(Adversary):
+class ConstantAdversary(Adversary):
     def __init__(self, true_mu: float, true_stddev: float, epsilon: float):
         """
         This method initializes the adversary.
