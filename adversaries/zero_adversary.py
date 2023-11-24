@@ -26,7 +26,7 @@ class ZeroAdversary(Adversary):
 
         # Compute the quantile
         projections = sample @ direction
-        percentile = np.percentile(projections, self.epsilon)
+        percentile = np.percentile(projections, self.epsilon * 100)
 
         sample[projections < percentile] = 0
         return sample

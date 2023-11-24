@@ -30,8 +30,9 @@ class SwapAdversary(Adversary):
 
         # Compute the quantile
         projections = sample @ direction
-        percentile = np.percentile(projections, self.epsilon)
+        percentile = np.percentile(projections, self.epsilon * 100)
 
-        sample[projections < percentile] *= -1
-        sample[projections < percentile] += d * self.true_mu * negative_direction
+        sample[projections < percentile] += (
+            100000000000 * d * self.true_mu * negative_direction
+        )
         return sample

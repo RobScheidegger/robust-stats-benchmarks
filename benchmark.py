@@ -121,7 +121,7 @@ class RobustMeanEvaluator:
 
 def main():
     adversaries: list[Adversary] = [
-        # NullAdversary,
+        NullAdversary,
         # ZeroAdversary,
         ConstantAdversary,
         InfinityAdversary,
@@ -139,16 +139,30 @@ def main():
 
     evaluator = RobustMeanEvaluator(adversaries, estimators, distributions)
 
-    mu = np.ones((2000)) * 1000
-    sigma = np.ones((2000)) * 10
+    for d in [10, 10000]:
+        #        for n in [10, 100, 1000, 10000]:
+        for epsilon in [0.05]:
+            mu = np.ones((d)) * 1000
+            sigma = np.ones((d)) * 10
 
-    evaluator.benchmark(
-        mu=mu,
-        stddev=sigma,
-        n=1000,
-        d=2000,
-        epsilon=0.10,
-    )
+            evaluator.benchmark(
+                mu=mu,
+                stddev=sigma,
+                n=100,
+                d=d,
+                epsilon=epsilon,
+            )
+    # d = 10**5
+    # mu = np.ones((d)) * 1000
+    # sigma = np.ones((d)) * 10
+
+    # evaluator.benchmark(
+    #     mu=mu,
+    #     stddev=sigma,
+    #     n=100,
+    #     d=d,
+    #     epsilon=0.10,
+    # )
 
     # Print a header column
     print(

@@ -28,7 +28,7 @@ class ConstantAdversary(Adversary):
 
         # Compute the quantile
         projections = sample @ direction
-        percentile = np.percentile(projections, self.epsilon)
+        percentile = np.percentile(projections, self.epsilon * 100)
 
         sample[projections < percentile] += d * self.true_mu
         return sample
