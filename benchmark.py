@@ -121,10 +121,11 @@ class RobustMeanEvaluator:
 
 def main():
     adversaries: list[Adversary] = [
-        NullAdversary,
-        ZeroAdversary,
+        # NullAdversary,
+        # ZeroAdversary,
         ConstantAdversary,
         InfinityAdversary,
+        SwapAdversary,
     ]
 
     estimators: list[RobustMeanEstimator] = [
@@ -138,14 +139,14 @@ def main():
 
     evaluator = RobustMeanEvaluator(adversaries, estimators, distributions)
 
-    mu = np.ones((200)) * 10
-    sigma = np.ones((200))
+    mu = np.ones((2000)) * 1000
+    sigma = np.ones((2000)) * 10
 
     evaluator.benchmark(
         mu=mu,
         stddev=sigma,
         n=1000,
-        d=200,
+        d=2000,
         epsilon=0.10,
     )
 
