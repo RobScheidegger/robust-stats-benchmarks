@@ -15,4 +15,6 @@ class GaussianDistribution(Distribution):
 
     def sample(self, n: int, d: int) -> np.ndarray:
         # Sample from a Gaussian distribution
+        assert self.mu.shape == (d,), "Actual:" + str(self.mu.shape)
+        assert self.stddev.shape == (d,)
         return np.random.normal(self.mu, self.stddev, (n, d))

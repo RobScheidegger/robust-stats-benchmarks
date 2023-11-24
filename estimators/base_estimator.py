@@ -9,4 +9,4 @@ class BaseEstimator(RobustMeanEstimator):
 
     def _estimate(self) -> np.ndarray:
         data = self.data
-        return np.mean(data, axis=1)
+        return np.mean(data, axis=0)

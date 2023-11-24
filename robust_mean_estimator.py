@@ -3,7 +3,7 @@ import numpy as np
 
 
 class RobustMeanEstimator:
-    def __init__(self, data, mu: np.ndarray, sigma, epsilon):
+    def __init__(self, data, mu: np.ndarray, sigma: np.ndarray, epsilon: float):
         self.data = data
         self.mu = mu
         self.sigma = sigma
@@ -31,10 +31,13 @@ class RobustMeanEstimator:
         pass
 
     def estimate_mean(self) -> np.ndarray:
-        self.estimation = self.estimate()
-        assert (
-            self.estimation.shape == self.mu.shape
-        ), "The estimated mean must be a vector."
+        self.estimation = self._estimate()
+        assert self.estimation.shape == self.mu.shape, (
+            "The estimated mean must be a vector: "
+            + str(self.estimation.shape)
+            + " vs "
+            + str(self.mu.shape)
+        )
         return self.estimation
 
     def loss(self) -> float:

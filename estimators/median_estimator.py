@@ -9,4 +9,4 @@ class MedianEstimator(RobustMeanEstimator):
 
     def _estimate(self) -> np.ndarray:
         data = self.data
-        return np.median(data, axis=1)
+        return np.median(data, axis=0)
