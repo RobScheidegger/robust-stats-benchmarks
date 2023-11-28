@@ -1,13 +1,13 @@
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 import numpy as np
 
 
-class Distribution:
+class Distribution(ABC):
     """
     Class representing some probability distribution.
     """
 
-    def __init__(self, mu: np.ndarray[float], stddev: np.ndarray[float]) -> None:
+    def __init__(self, mu: np.ndarray[float], sigma: np.ndarray[float]) -> None:
         """
         This method initializes the distribution.
 
@@ -16,7 +16,7 @@ class Distribution:
         """
 
         self.mu = mu
-        self.stddev = stddev
+        self.sigma = sigma
 
     @abstractmethod
     def sample(self, n: int, d: int) -> np.ndarray:

@@ -3,7 +3,7 @@ import numpy as np
 
 
 class ZeroAdversary(Adversary):
-    def __init__(self, true_mu: float, true_stddev: float, epsilon: float):
+    def __init__(self, true_mu: float, true_sigma: float, epsilon: float):
         """
         This method initializes the adversary.
 
@@ -11,7 +11,7 @@ class ZeroAdversary(Adversary):
         :param std: The standard deviation of the adversary's distribution.
         """
 
-        super().__init__(true_mu, true_stddev, epsilon)
+        super().__init__(true_mu, true_sigma, epsilon)
 
     def corrupt_sample(self, sample: np.ndarray) -> np.ndarray:
         # Select a random direction in R^d, and select the \epsilon-th quantile of the distribution along that direction
