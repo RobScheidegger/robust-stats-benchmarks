@@ -13,6 +13,6 @@ class NullAdversary(Adversary):
 
         super().__init__(true_mu, true_sigma, epsilon)
 
-    def corrupt_sample(self, sample: np.ndarray) -> np.ndarray:
+    def _corrupt_sample(self, sample: np.ndarray) -> np.ndarray:
         # For the null adversary, don't corrupt the sample at all (ground truth)
         return sample

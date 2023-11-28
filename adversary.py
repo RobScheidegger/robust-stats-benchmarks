@@ -36,9 +36,11 @@ class Adversary(ABC):
         n, _d = sample.shape
         corrupted_samples = self._corrupt_sample(sample)
 
+        allowed_samples_corrupted = self.epsilon * float(n)
+        samples_corrupted = n - np.all(corrupted_samples == sample, axis=0).sum()
+
         assert (
-            np.all(corrupted_samples == sample, axis=0).sum()
-            >= (1.0 - self.epsilon) * n
-        ), "Adversary corrupted too many samples."
+            samples_corrupted <= allowed_samples_corrupted
+        ), f"Adversary corrupted too many samples: {samples_corrupted} > {allowed_samples_corrupted}, epsilon={self.epsilon}, n={n}."
 
         return corrupted_samples

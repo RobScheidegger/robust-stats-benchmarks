@@ -10,20 +10,20 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [10, 10000]
+    d_options: list[int] = [10, 100, 1000]
     n_options: list[int] = [100]
-    epsilon_options: list[int] = [0.05]
+    epsilon_options: list[int] = [0.05, 0.1, 0.15, 0.2]
 
     adversaries: list[Adversary] = [
         NullAdversary,
         # ZeroAdversary,
-        ConstantAdversary,
-        InfinityAdversary,
+        # ConstantAdversary,
+        # InfinityAdversary,
         SwapAdversary,
     ]
 
     estimators: list[RobustMeanEstimator] = [
-        base_estimator,
+        # BaseEstimator,
         MedianEstimator,
     ]
 
@@ -43,15 +43,16 @@ def main():
                         for distribution_type in distributions:
                             mu = np.ones((d)) * MU
                             sigma = np.ones((d)) * SIGMA
-                            evaluator = (
-                                RobustMeanEvaluator(
-                                    epsilon=epsilon,
-                                    n=n,
-                                    d=d,
-                                    adversary_type=adversary_type,
-                                    estimator_type=estimator_type,
-                                    distribution=GaussianDistribution(mu, sigma),
-                                ),
+
+                            print(adversary_type)
+
+                            evaluator = RobustMeanEvaluator(
+                                epsilon=epsilon,
+                                n=n,
+                                d=d,
+                                adversary_type=adversary_type,
+                                estimator_type=estimator_type,
+                                distribution=GaussianDistribution(mu, sigma),
                             )
 
                             result = evaluator.evaluate(estimate_loss=True)
@@ -59,13 +60,11 @@ def main():
 
     # Print a header column
     print(
-        f"{'n':6s} {'d':6s} {'adversary':20s} {'estimator':20s} {'epsilon':10s} {'loss(x1000)':10s} {'loss_stddev':10s}"
+        f"{'n':6s} {'d':6s} {'adversary':20s} {'estimator':20s} {'epsilon':10s} {'loss':10s} {'loss_stddev':10s} {'loss/epsilon':10s} {'loss/eps * sqrt(d)':20s}"
     )
-    LOSS_FACTOR = 1
-    for result in evaluator.results:
-        # Pretty print the results as different columns
+    for result in results:
         print(
-            f"{result.n:6d} {result.d:6d} {result.adversary:20s} {result.estimator:20s} {result.epsilon:10.4f} {LOSS_FACTOR * result.loss:10.4f} {result.loss_stddev:10.4f}"
+            f"{result.n:6d} {result.d:6d} {result.adversary:20s} {result.estimator:20s} {result.epsilon:10.4f} {result.loss:10e} {result.loss_stddev:10e} {result.loss/result.epsilon:10e} {result.loss/result.epsilon * np.sqrt(result.d):10e}"
         )
 
 

@@ -15,9 +15,9 @@ class ConstantAdversary(Adversary):
 
         super().__init__(true_mu, true_sigma, epsilon)
 
-    def corrupt_sample(self, sample: np.ndarray) -> np.ndarray:
+    def _corrupt_sample(self, sample: np.ndarray) -> np.ndarray:
         # Select a random direction in R^d, and select the \epsilon-th quantile of the distribution along that direction
-        # Then, set those to zero
+        # Then, set those to a constant
         _n, d = sample.shape
 
         # Pick a random direction

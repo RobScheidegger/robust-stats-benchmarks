@@ -62,11 +62,9 @@ class RobustMeanEvaluator:
     ) -> BenchmarkResult:
         losses = []
         for corrupted_sample in self.corrupted_samples:
-            estimator: RobustMeanEstimator = self.estimator_type(
-                corrupted_sample, self.epsilon
-            )
+            estimator: RobustMeanEstimator = self.estimator_type()
 
-            estimate = estimator.estimate_mean()
+            estimate = estimator.estimate_mean(corrupted_sample, self.epsilon)
 
             if estimate_loss:
                 loss = self.loss(estimate)

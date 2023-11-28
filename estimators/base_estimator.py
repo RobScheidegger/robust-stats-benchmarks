@@ -7,6 +7,5 @@ class BaseEstimator(RobustMeanEstimator):
     Trivial base emulator that performs the traditional mean computation (no robustness).
     """
 
-    def _estimate(self) -> np.ndarray:
-        data = self.data
-        return np.mean(data, axis=0)
+    def _estimate(self, samples: np.ndarray, epsilon: float) -> np.ndarray:
+        return np.mean(samples, axis=0)
