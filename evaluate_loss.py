@@ -25,7 +25,9 @@ def main():
     estimators: list[RobustMeanEstimator] = [
         # BaseEstimator,
         MedianEstimator,
-        RANSACEstimator,
+        # RANSACEstimator,
+        # GeoMedianEstimator,
+        PruningEstimator,
     ]
 
     distributions: list[Distribution] = [

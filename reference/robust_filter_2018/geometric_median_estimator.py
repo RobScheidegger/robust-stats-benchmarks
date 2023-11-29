@@ -10,14 +10,9 @@ import numpy as np
 from robust_mean_estimator import RobustMeanEstimator
 
 
-class RANSACEstimator(RobustMeanEstimator):
+class GeoMedianEstimator(RobustMeanEstimator):
     """
-    Estimator for the mean using the RANSAC algorithm.
-    """
-
-    tau = 0.05
-    """
-    Tau parameter for the RANSAC algorithm determining fit to data.
+    Estimator for the mean using the geometric median algorithm.
     """
 
     def _estimate(self, sample: np.ndarray, epsilon: float) -> np.ndarray:
