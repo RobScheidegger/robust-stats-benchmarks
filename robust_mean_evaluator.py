@@ -74,7 +74,7 @@ class RobustMeanEvaluator:
             self.n,
             self.d,
             self.adversary_type.__name__,
-            self.estimator_type.__name__,
+            self.estimator_type.__name__.replace("Estimator", ""),
             type(self.distribution).__name__,
             self.mu,
             self.sigma,

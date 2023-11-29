@@ -10,8 +10,8 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [10, 100, 1000, 10000]
-    n_options: list[int] = [100]
+    d_options: list[int] = [10, 100]
+    n_options: list[int] = [100000]
     epsilon_options: list[int] = [0.05, 0.1, 0.15, 0.2, 0.25]
 
     adversaries: list[Adversary] = [
@@ -27,7 +27,8 @@ def main():
         MedianEstimator,
         # RANSACEstimator,
         # GeoMedianEstimator,
-        PruningEstimator,
+        # PruningEstimator,
+        Filter2018Estimator,
     ]
 
     distributions: list[Distribution] = [
@@ -74,6 +75,7 @@ def main():
             f"{result.loss_stddev:10e}",
             f"{result.loss/result.epsilon:10e}",
             f"{result.loss/(result.epsilon * np.sqrt(result.d)):10e}",
+            f"{result.loss/(result.epsilon * np.sqrt(np.log(1.0 / result.epsilon))):10e}",
         ]
         print(" ".join(print_outputs))
 
