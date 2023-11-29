@@ -37,7 +37,7 @@ class Adversary(ABC):
         corrupted_samples = self._corrupt_sample(sample)
 
         allowed_samples_corrupted = self.epsilon * float(n)
-        samples_corrupted = n - np.all(corrupted_samples == sample, axis=0).sum()
+        samples_corrupted = n - np.all(corrupted_samples == sample, axis=1).sum()
 
         assert (
             samples_corrupted <= allowed_samples_corrupted

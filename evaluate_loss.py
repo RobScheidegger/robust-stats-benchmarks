@@ -10,12 +10,12 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [10, 100, 1000]
+    d_options: list[int] = [10, 100, 1000, 10000]
     n_options: list[int] = [100]
-    epsilon_options: list[int] = [0.05, 0.1, 0.15, 0.2]
+    epsilon_options: list[int] = [0.05, 0.1, 0.15, 0.2, 0.25]
 
     adversaries: list[Adversary] = [
-        NullAdversary,
+        # NullAdversary,
         # ZeroAdversary,
         # ConstantAdversary,
         # InfinityAdversary,
@@ -25,6 +25,7 @@ def main():
     estimators: list[RobustMeanEstimator] = [
         # BaseEstimator,
         MedianEstimator,
+        RANSACEstimator,
     ]
 
     distributions: list[Distribution] = [
@@ -44,8 +45,6 @@ def main():
                             mu = np.ones((d)) * MU
                             sigma = np.ones((d)) * SIGMA
 
-                            print(adversary_type)
-
                             evaluator = RobustMeanEvaluator(
                                 epsilon=epsilon,
                                 n=n,
@@ -60,12 +59,21 @@ def main():
 
     # Print a header column
     print(
-        f"{'n':6s} {'d':6s} {'adversary':20s} {'estimator':20s} {'epsilon':10s} {'loss':10s} {'loss_stddev':10s} {'loss/epsilon':10s} {'loss/eps * sqrt(d)':20s}"
+        f"{'n':6s} {'d':6s} {'adversary':20s} {'estimator':20s} {'epsilon':10s} {'loss':10s} {'loss_stddev':10s} {'loss/epsilon':10s} {'loss/(eps * sqrt(d))':20s}"
     )
     for result in results:
-        print(
-            f"{result.n:6d} {result.d:6d} {result.adversary:20s} {result.estimator:20s} {result.epsilon:10.4f} {result.loss:10e} {result.loss_stddev:10e} {result.loss/result.epsilon:10e} {result.loss/result.epsilon * np.sqrt(result.d):10e}"
-        )
+        print_outputs = [
+            f"{result.n:6d}",
+            f"{result.d:6d}",
+            f"{result.adversary:20s}",
+            f"{result.estimator:20s}",
+            f"{result.epsilon:10.4f}",
+            f"{result.loss:10e}",
+            f"{result.loss_stddev:10e}",
+            f"{result.loss/result.epsilon:10e}",
+            f"{result.loss/(result.epsilon * np.sqrt(result.d)):10e}",
+        ]
+        print(" ".join(print_outputs))
 
 
 if __name__ == "__main__":

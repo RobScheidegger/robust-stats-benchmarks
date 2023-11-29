@@ -4,7 +4,7 @@ from adversary import Adversary
 from distribution import Distribution
 from robust_mean_estimator import RobustMeanEstimator
 
-SAMPLE_COUNT = 100
+SAMPLE_COUNT = 10
 
 
 @dataclass
@@ -90,4 +90,4 @@ class RobustMeanEvaluator:
         :param mu: The mean to compute the loss at.
         :return: The loss.
         """
-        return np.mean((estimate - self.mu)) ** 2
+        return np.sqrt(np.sum((estimate - self.mu) ** 2))
