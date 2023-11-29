@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.linalg import svd
 from scipy import special
+import matlab.engine
+
 
 from robust_mean_estimator import RobustMeanEstimator
 
@@ -11,12 +13,35 @@ class Filter2018Estimator(RobustMeanEstimator):
     """
 
     def _estimate(self, sample: np.ndarray, epsilon: float) -> np.ndarray:
-        n, d = sample.shape
+        # Start MATLAB engine
+        eng = matlab.engine.start_matlab()
 
+        # Add the folder containing your MATLAB script to the MATLAB path
+        eng.addpath("reference/robust_filter_2018/", nargout=0)
+
+        # Define a sample array
+        input_array = matlab.double(sample.tolist())
+
+        tau = 0.1
+        cher = 2.5
+        eps = epsilon
+        data = input_array
+        # Call the MATLAB function from the script
+        result = eng.filterGaussianMean(data, eps, tau, cher, nargout=1)
+
+        # # Display the result
+        # print(result)
+
+        # Stop the MATLAB engine
+        eng.quit()
+
+        return np.array(result).reshape(-1)
+        n, d = sample.shape
         empirical_mean = np.mean(sample, axis=0)
         threshold = epsilon * np.log(1.0 / epsilon)  # TODO: Check
-        centered_data = (sample - empirical_mean) / np.sqrt(n)
-        cher = 2
+        centered_data = (empirical_mean - sample) / np.sqrt(n)
+        cher = 2.5
+        tau = 0.1
 
         U, S, _ = svd(centered_data.T, full_matrices=False)
 
@@ -29,23 +54,31 @@ class Filter2018Estimator(RobustMeanEstimator):
 
         # Otherwise, project in direction of v and filter
         delta = 2 * epsilon
-        projected_data1 = (
-            sample * v
-        )  # TODO: Is this coordinate-wise or matrix multiplication?
+        projected_data1 = sample @ v
         med = np.median(projected_data1)
 
-        print(projected_data1.shape, med.shape, sample.shape, v.shape)
-        projected_data = np.concatenate([np.abs(projected_data1 - med), sample], axis=1)
+        # Sort data by the projection
+        # projected_data = np.concatenate([np.abs(projected_data1 - med), sample], axis=0)
+        # assert projected_data.size == (n, d + 1)
 
-        sorted_projected_data = projected_data[
-            projected_data[:, 0].argsort()
-        ]  # TODO: Questionable
+        projected_data = np.abs(sample @ v - med)
+        sort_order = projected_data.argsort()
+        sorted_projected_samples = sample[sort_order]
+        projected_data = projected_data[sort_order]
+
+        I = 0
         for i in range(n):
-            T = sorted_projected_data[i, 0] - delta
-            if (n - i) > 0.5 * n * (1 - special.erf(T / np.sqrt(2)) + threshold):
+            T = projected_data[i] - delta
+            if (n - i) > (
+                0.5 * cher * float(n) * special.erfc(T / np.sqrt(2))
+                + epsilon / (float(d) * np.log(float(d) * epsilon / tau))
+            ):
                 break
 
-        if i == 0 or i == n:
+            I += 1
+
+        if I == 0 or I >= n - 1:
             return empirical_mean
 
-        return self._estimate(sorted_projected_data[:i, 1:], epsilon)
+        # print("Doing a thing!")
+        return self._estimate(sorted_projected_samples[:I], epsilon)

@@ -10,14 +10,12 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [10, 100]
-    n_options: list[int] = [100000]
-    epsilon_options: list[int] = [0.05, 0.1, 0.15, 0.2, 0.25]
+    d_options: list[int] = [10, 30, 50, 70, 90]
+    n_options: list[int] = [1000]
+    epsilon_options: list[int] = [0.1]
 
     adversaries: list[Adversary] = [
         # NullAdversary,
-        # ZeroAdversary,
-        # ConstantAdversary,
         # InfinityAdversary,
         SwapAdversary,
     ]
@@ -35,15 +33,15 @@ def main():
         GaussianDistribution,
     ]
 
-    MU = 100
-    SIGMA = 10
+    MU = 0
+    SIGMA = 1
 
     results = []
-    for d in d_options:
-        for n in n_options:
-            for epsilon in epsilon_options:
-                for adversary_type in adversaries:
-                    for estimator_type in estimators:
+    for estimator_type in estimators:
+        for d in d_options:
+            for n in n_options:
+                for epsilon in epsilon_options:
+                    for adversary_type in adversaries:
                         for distribution_type in distributions:
                             mu = np.ones((d)) * MU
                             sigma = np.ones((d)) * SIGMA
@@ -54,13 +52,12 @@ def main():
                                 d=d,
                                 adversary_type=adversary_type,
                                 estimator_type=estimator_type,
-                                distribution=GaussianDistribution(mu, sigma),
+                                distribution=distribution_type(mu, sigma),
                             )
 
                             result = evaluator.evaluate(estimate_loss=True)
                             results.append(result)
 
-    # Print a header column
     print(
         f"{'n':6s} {'d':6s} {'adversary':20s} {'estimator':20s} {'epsilon':10s} {'loss':10s} {'loss_stddev':10s} {'loss/epsilon':10s} {'loss/(eps * sqrt(d))':20s}"
     )

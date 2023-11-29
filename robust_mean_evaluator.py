@@ -4,7 +4,7 @@ from adversary import Adversary
 from distribution import Distribution
 from robust_mean_estimator import RobustMeanEstimator
 
-SAMPLE_COUNT = 10
+SAMPLE_COUNT = 3
 
 
 @dataclass
@@ -48,6 +48,7 @@ class RobustMeanEvaluator:
         self._prepare()
 
     def _prepare(self):
+        np.random.seed(0)
         self.samples = [
             self.distribution.sample(self.n, self.d) for _ in range(SAMPLE_COUNT)
         ]
@@ -79,7 +80,7 @@ class RobustMeanEvaluator:
             self.mu,
             self.sigma,
             self.epsilon,
-            np.mean(losses),
+            np.max(losses),
             np.std(losses),
         )
 
