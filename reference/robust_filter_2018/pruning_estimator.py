@@ -22,8 +22,8 @@ class PruningEstimator(RobustMeanEstimator):
 
         for i in range(n):
             if np.linalg.norm(sample[i] - coord_med) < threshold:
-                num_filtered_points += 1
                 filtered_points[num_filtered_points] = sample[i]
+                num_filtered_points += 1
 
         filtered_points = filtered_points[:num_filtered_points]
 

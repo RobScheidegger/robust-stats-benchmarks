@@ -29,10 +29,11 @@ class SwapAdversary(Adversary):
         negative_direction /= np.linalg.norm(negative_direction)
 
         # Compute the quantile
-        projections = sample @ direction
+        projections = (sample - self.true_mu) @ direction
         percentile = np.percentile(projections, self.epsilon * 100)
 
+        # Project the sample into the opposite direction of the its direction to the true mean.
         sample[projections < percentile] += (
-            100000000000 * d * self.true_mu * negative_direction
+            -2 * direction * self.true_sigma * np.sqrt(d)
         )
         return sample
