@@ -8,17 +8,20 @@ from estimators import (
     BaseEstimator,
 )
 from distributions import GaussianDistribution
+from adversaries import SwapAdversary
 
 D = 20
 EPSILON = 0.2
 K = 5
 N = int(K * D / (EPSILON**2))
-NUM_SAMPLES = 10
+NUM_REPETITIONS = 10
 
 
 distribution = GaussianDistribution(mu=np.zeros(D), sigma=np.ones(D))
 np.random.seed(0)
-samples = [distribution.sample(N, D) for _ in range(10)]
+samples = [distribution.sample(N, D) for _ in range(NUM_REPETITIONS)]
+adversary = SwapAdversary(true_mu=np.zeros(D), true_sigma=np.ones(D), epsilon=EPSILON)
+samples = [adversary.corrupt_sample(sample.copy()) for sample in samples]
 
 python_estimator = Filter2018PythonEstimator()
 matlab_estimator = Filter2018MATLABEstimator()
