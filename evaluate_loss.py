@@ -10,7 +10,7 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [10]
+    d_options: list[int] = [10, 20, 40, 80]
     n_options: list[int] = [1000]
     epsilon_options: list[int] = [0.1]
 
@@ -26,9 +26,9 @@ def main():
         # RANSACEstimator,
         # GeoMedianEstimator,
         # PruningEstimator,
-        Filter2018PythonEstimator,
+        # Filter2018PythonEstimator,
         # Filter2018MATLABEstimator,
-        CDGS20_PGDEstimator,
+        # CDGS20_PGDEstimator,
         DKKLMS16_FilterEstimator,
     ]
 

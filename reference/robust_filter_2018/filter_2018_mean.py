@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.linalg import svd
-from scipy import special
+from scipy import special, sparse
 import matlab.engine
 
 
@@ -47,7 +47,7 @@ class Filter2018PythonEstimator(RobustMeanEstimator):
         cher = 2.5
         tau = 0.1
 
-        U, S, _ = svd(centered_data.T, full_matrices=False)
+        U, S, _ = sparse.linalg.svds(centered_data.T, k=1)
 
         lambda_ = S[0] ** 2
         v = U[:, 0]
