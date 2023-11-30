@@ -7,18 +7,16 @@ import matlab.engine
 from robust_mean_estimator import RobustMeanEstimator
 
 
-class Filter2018Estimator(RobustMeanEstimator):
+class Filter2018MATLABEstimator(RobustMeanEstimator):
     """
     Estimator for the mean by pruning points that are far away.
     """
 
+    def __init__(self):
+        self.eng = matlab.engine.start_matlab()
+        self.eng.addpath("reference/robust_filter_2018/", nargout=0)
+
     def _estimate(self, sample: np.ndarray, epsilon: float) -> np.ndarray:
-        # Start MATLAB engine
-        eng = matlab.engine.start_matlab()
-
-        # Add the folder containing your MATLAB script to the MATLAB path
-        eng.addpath("reference/robust_filter_2018/", nargout=0)
-
         # Define a sample array
         input_array = matlab.double(sample.tolist())
 
@@ -27,15 +25,21 @@ class Filter2018Estimator(RobustMeanEstimator):
         eps = epsilon
         data = input_array
         # Call the MATLAB function from the script
-        result = eng.filterGaussianMean(data, eps, tau, cher, nargout=1)
-
-        # # Display the result
-        # print(result)
-
-        # Stop the MATLAB engine
-        eng.quit()
+        result = self.eng.filterGaussianMean(data, eps, tau, cher, nargout=1)
 
         return np.array(result).reshape(-1)
+
+    def cleanup(self):
+        # Stop the MATLAB engine
+        self.eng.quit()
+
+
+class Filter2018PythonEstimator(RobustMeanEstimator):
+    """
+    Estimator for the mean by pruning points that are far away.
+    """
+
+    def _estimate(self, sample: np.ndarray, epsilon: float) -> np.ndarray:
         n, d = sample.shape
         empirical_mean = np.mean(sample, axis=0)
         threshold = epsilon * np.log(1.0 / epsilon)  # TODO: Check
@@ -56,10 +60,6 @@ class Filter2018Estimator(RobustMeanEstimator):
         delta = 2 * epsilon
         projected_data1 = sample @ v
         med = np.median(projected_data1)
-
-        # Sort data by the projection
-        # projected_data = np.concatenate([np.abs(projected_data1 - med), sample], axis=0)
-        # assert projected_data.size == (n, d + 1)
 
         projected_data = np.abs(sample @ v - med)
         sort_order = projected_data.argsort()

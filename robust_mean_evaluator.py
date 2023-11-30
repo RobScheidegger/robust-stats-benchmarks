@@ -4,7 +4,7 @@ from adversary import Adversary
 from distribution import Distribution
 from robust_mean_estimator import RobustMeanEstimator
 
-SAMPLE_COUNT = 3
+SAMPLE_COUNT = 10
 
 
 @dataclass
@@ -70,6 +70,8 @@ class RobustMeanEvaluator:
             if estimate_loss:
                 loss = self.loss(estimate)
                 losses.append(loss)
+
+            estimator.cleanup()
 
         return BenchmarkResult(
             self.n,

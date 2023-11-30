@@ -30,3 +30,9 @@ class RobustMeanEstimator(ABC):
             + str(self.d)
         )
         return self.estimation
+
+    def cleanup(self):
+        """
+        Cleans up any state that the estimator may have used or created.
+        """
+        pass
