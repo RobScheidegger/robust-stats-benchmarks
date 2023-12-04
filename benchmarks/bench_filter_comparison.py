@@ -6,28 +6,33 @@ from estimators import (
     MedianEstimator,
     DKKLMS16_FilterEstimator,
     BaseEstimator,
+    HeuristicRustEstimator,
 )
 from distributions import GaussianDistribution
 from adversaries import SwapAdversary
+from robust_stats import robust_mean_heuristic
 
 D = 20
 EPSILON = 0.2
 K = 5
 N = int(K * D / (EPSILON**2))
-NUM_REPETITIONS = 10
+NUM_REPETITIONS = 1
 
 
 distribution = GaussianDistribution(mu=np.zeros(D), sigma=np.ones(D))
 np.random.seed(0)
 samples = [distribution.sample(N, D) for _ in range(NUM_REPETITIONS)]
 adversary = SwapAdversary(true_mu=np.zeros(D), true_sigma=np.ones(D), epsilon=EPSILON)
-samples = [adversary.corrupt_sample(sample.copy()) for sample in samples]
+samples = [
+    adversary.corrupt_sample(sample.copy()).astype(np.float32) for sample in samples
+]
 
 python_estimator = Filter2018PythonEstimator()
 matlab_estimator = Filter2018MATLABEstimator()
 median_estimator = MedianEstimator()
 heuristic_estimator = DKKLMS16_FilterEstimator()
 mean_estimator = BaseEstimator()
+heuristic_rust_esimtator = HeuristicRustEstimator()
 
 
 def mean():
@@ -55,6 +60,11 @@ def heuristic():
         heuristic_estimator.estimate_mean(sample, EPSILON)
 
 
+def heuristic_rust():
+    for sample in samples:
+        heuristic_rust_esimtator.estimate_mean(sample, EPSILON)
+
+
 if __name__ == "__main__":
     benchmarker = Benchmarker()
     benchmarker.add_benchmark(mean, "Mean (Baseline)", True)
@@ -62,6 +72,7 @@ if __name__ == "__main__":
     benchmarker.add_benchmark(python, "Python Filter 2018")
     benchmarker.add_benchmark(matlab, "MATLAB Filter 2018")
     benchmarker.add_benchmark(heuristic, "Heuristic Filter 2016")
+    benchmarker.add_benchmark(heuristic_rust, "Heuristic Filter 2016 (Rust)")
 
     benchmarker.run()
 

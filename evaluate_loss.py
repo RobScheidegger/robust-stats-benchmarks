@@ -30,6 +30,7 @@ def main():
         # Filter2018MATLABEstimator,
         # CDGS20_PGDEstimator,
         DKKLMS16_FilterEstimator,
+        HeuristicRustEstimator,
     ]
 
     distributions: list[Distribution] = [

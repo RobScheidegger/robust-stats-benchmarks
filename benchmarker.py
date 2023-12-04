@@ -2,7 +2,7 @@ import time
 import numpy as np
 
 WARMUP_EXECUTIONS = 2
-REPETITIONS = 10
+REPETITIONS = 1
 PRINT_COLUMN_WIDTH = 25
 
 
