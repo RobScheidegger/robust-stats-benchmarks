@@ -7,10 +7,10 @@ from estimators import (
     DKKLMS16_FilterEstimator,
     BaseEstimator,
     HeuristicRustEstimator,
+    FilterRustEstimator,
 )
 from distributions import GaussianDistribution
 from adversaries import SwapAdversary
-from robust_stats import robust_mean_heuristic
 
 D = 20
 EPSILON = 0.2
@@ -33,6 +33,7 @@ median_estimator = MedianEstimator()
 heuristic_estimator = DKKLMS16_FilterEstimator()
 mean_estimator = BaseEstimator()
 heuristic_rust_esimtator = HeuristicRustEstimator()
+filter_rust_estimator = FilterRustEstimator()
 
 
 def mean():
@@ -65,14 +66,20 @@ def heuristic_rust():
         heuristic_rust_esimtator.estimate_mean(sample, EPSILON)
 
 
+def filter_rust():
+    for sample in samples:
+        filter_rust_estimator.estimate_mean(sample, EPSILON)
+
+
 if __name__ == "__main__":
     benchmarker = Benchmarker()
     benchmarker.add_benchmark(mean, "Mean (Baseline)", True)
     benchmarker.add_benchmark(median, "Median")
     benchmarker.add_benchmark(python, "Python Filter 2018")
-    benchmarker.add_benchmark(matlab, "MATLAB Filter 2018")
-    benchmarker.add_benchmark(heuristic, "Heuristic Filter 2016")
+    # benchmarker.add_benchmark(matlab, "MATLAB Filter 2018")
+    # benchmarker.add_benchmark(heuristic, "Heuristic Filter 2016")
     benchmarker.add_benchmark(heuristic_rust, "Heuristic Filter 2016 (Rust)")
+    benchmarker.add_benchmark(filter_rust, "Filter 2018 (Rust)")
 
     benchmarker.run()
 

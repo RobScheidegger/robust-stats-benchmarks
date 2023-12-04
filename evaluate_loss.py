@@ -10,9 +10,9 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [10, 20, 40, 80]
-    n_options: list[int] = [1000]
-    epsilon_options: list[int] = [0.1]
+    d_options: list[int] = [4, 16, 32]
+    n_options: list[int] = [100]
+    epsilon_options: list[int] = [0.2]
 
     adversaries: list[Adversary] = [
         # NullAdversary,
@@ -31,6 +31,7 @@ def main():
         # CDGS20_PGDEstimator,
         DKKLMS16_FilterEstimator,
         HeuristicRustEstimator,
+        # FilterRustEstimator,
     ]
 
     distributions: list[Distribution] = [

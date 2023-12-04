@@ -4,7 +4,7 @@ from adversary import Adversary
 from distribution import Distribution
 from robust_mean_estimator import RobustMeanEstimator
 
-SAMPLE_COUNT = 10
+SAMPLE_COUNT = 2
 
 
 @dataclass
@@ -54,7 +54,8 @@ class RobustMeanEvaluator:
         ]
         self.adversary = self.adversary_type(self.mu, self.sigma, self.epsilon)
         self.corrupted_samples = [
-            self.adversary.corrupt_sample(sample.copy()) for sample in self.samples
+            self.adversary.corrupt_sample(sample.copy()).astype(np.float32)
+            for sample in self.samples
         ]
 
     def evaluate(
