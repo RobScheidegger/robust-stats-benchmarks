@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.linalg import svd
 from scipy import special, sparse
 import matlab.engine
 

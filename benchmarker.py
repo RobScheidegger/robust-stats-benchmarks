@@ -1,4 +1,5 @@
 import time
+from typing import Callable
 import numpy as np
 
 WARMUP_EXECUTIONS = 2
@@ -12,7 +13,7 @@ class Benchmarker:
     """
 
     def __init__(self):
-        self.benchmarks: list[tuple[function, str]] = []
+        self.benchmarks: list[tuple[Callable, str]] = []
         self.results: list[list[float]] = []
         self.baseline = None
 
@@ -48,6 +49,8 @@ class Benchmarker:
                 baseline_index = i
                 baseline_mean = np.mean(self.results[i])
                 break
+
+        assert baseline_mean is not None, "The baseline must be set."
 
         for i in range(len(self.benchmarks)):
             _, name = self.benchmarks[i]
