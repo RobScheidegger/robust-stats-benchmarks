@@ -76,11 +76,12 @@ if __name__ == "__main__":
     benchmarker.add_benchmark(mean, "Mean (Baseline)", True)
     benchmarker.add_benchmark(median, "Median")
     benchmarker.add_benchmark(python, "Python Filter 2018")
-    # benchmarker.add_benchmark(matlab, "MATLAB Filter 2018")
-    # benchmarker.add_benchmark(heuristic, "Heuristic Filter 2016")
+    benchmarker.add_benchmark(matlab, "MATLAB Filter 2018")
+    benchmarker.add_benchmark(heuristic, "Heuristic Filter 2016")
     benchmarker.add_benchmark(heuristic_rust, "Heuristic Filter 2016 (Rust)")
     benchmarker.add_benchmark(filter_rust, "Filter 2018 (Rust)")
 
     benchmarker.run()
 
     benchmarker.print_results()
+    benchmarker.to_csv("bench_filter_comparison.csv")

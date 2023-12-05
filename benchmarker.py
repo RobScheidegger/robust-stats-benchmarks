@@ -71,5 +71,28 @@ class Benchmarker:
             ]
             print("".join(columns))
 
+    def to_csv(self, filename: str):
+        # Print all of the results out to a CSV
+
+        # Find the baseline index
+        baseline_mean = None
+        for i, (_, name) in enumerate(self.benchmarks):
+            if name == self.baseline:
+                baseline_mean = np.mean(self.results[i])
+                break
+
+        assert baseline_mean is not None, "The baseline must be set."
+
+        with open(filename, "w") as f:
+            f.write("Name,Mean,Sigma,Min,Max,Baseline\n")
+            for i in range(len(self.benchmarks)):
+                _, name = self.benchmarks[i]
+                result = self.results[i]
+                mean = np.mean(result)
+                sigma = np.std(result)
+                min = np.min(result)
+                max = np.max(result)
+                f.write(f"{name},{mean},{sigma},{min},{max},{mean / baseline_mean}\n")
+
     def get_results(self):
         return self.results
