@@ -27,6 +27,49 @@ class CDGS20_PGDEstimator(RobustMeanEstimator):
         # Stop the MATLAB engine
         self.eng.quit()
 
+class CDGS20_PGDEstimatorPython(RobustMeanEstimator):
+    def project_onto_capped_simplex_simple(self, w: np.ndarray, cap: float) -> np.ndarray:
+        tL = w.min() - 1
+        tR = w.max()
+
+        for _ in range(50):
+            t = (tL + tR) / 2
+            if np.sum(np.minimum(np.maximum(w - t, 0), cap)) < 1:
+                tR = t
+            else:
+                tL = t
+
+        t = (tL + tR) / 2
+        return np.minimum(np.maximum(w - t, 0), cap)
+
+    def _estimate(self, sample: np.ndarray, epsilon: float, n_itr=10) -> np.ndarray:
+        n, d = sample.shape
+        epsN = round(epsilon * n)
+        step_size = 1 / n
+        w = np.ones((n, 1)) / n
+
+        for itr in range(n_itr):
+            Xw = sample.T @ w
+            Sigma_w = sample.T @ np.diag(w) @ sample - Xw @ Xw.T
+            # return the largest eigenvalue and eigenvector of sigma_w
+            u, v = np.linalg.eigh(Sigma_w)
+
+            Xu = sample @ u
+            nabla_f_w = Xu * Xu - 2 * (w.T @ Xu) @ Xu
+            old_w = w
+            w = w - step_size * nabla_f_w / np.linalg.norm(nabla_f_w)
+            w = self.project_onto_capped_simplex_simple(w, 1 / (n - epsN))
+
+            Sigma_w = sample.T @ np.diag(w) @ sample - Xw @ Xw.T
+            _, new_v = np.linalg.eigh(Sigma_w)
+
+            if (new_v < v):
+                step_size = step_size * 2
+            else:
+                step_size = step_size / 4
+                w = old_w
+
+        return sample.T @ w
 
 class DKKLMS16_FilterEstimator(RobustMeanEstimator):
     """
