@@ -22,7 +22,7 @@ for itr = 1:nItr
     Xw = X' * w;
     Sigma_w_fun = @(v) X' * (w .* (X * v)) - Xw * Xw' * v;
     [u, lambda1] = eigs(Sigma_w_fun, d, 1);
-    
+
     % Compute the gradient of spectral norm (assuming unique top eigenvalue)
     % nabla_f_w = (X * u) .* (X * u) - (w' * X * u) * X * u;
     Xu = X * u;
@@ -31,7 +31,7 @@ for itr = 1:nItr
     w = w - stepSz * nabla_f_w / norm(nabla_f_w);
     % Projecting w onto the feasible region
     w = project_onto_capped_simplex_simple(w, 1 / (N - epsN));
-    
+
     % Use adaptive step size.
     %   If objective function decreases, take larger steps.
     %   If objective function increases, take smaller steps.

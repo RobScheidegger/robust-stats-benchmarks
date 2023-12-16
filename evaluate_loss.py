@@ -21,18 +21,18 @@ def main():
     ]
 
     estimators: list[RobustMeanEstimator] = [
-        # BaseEstimator,
-        # MedianEstimator,
-        # RANSACEstimator,
-        # GeoMedianEstimator,
-        # PruningEstimator,
-        # Filter2018PythonEstimator,
-        # Filter2018MATLABEstimator,
-        # CDGS20_PGDEstimator,
+        BaseEstimator,
+        MedianEstimator,
+        RANSACEstimator,
+        GeoMedianEstimator,
+        PruningEstimator,
+        Filter2018PythonEstimator,
+        Filter2018MATLABEstimator,
+        CDGS20_PGDEstimator,
         CDGS20_PGDEstimatorPython,
-        # DKKLMS16_FilterEstimator,
-        # HeuristicRustEstimator,
-        # FilterRustEstimator,
+        DKKLMS16_FilterEstimator,
+        HeuristicRustEstimator,
+        FilterRustEstimator,
     ]
 
     distributions: list[Distribution] = [
