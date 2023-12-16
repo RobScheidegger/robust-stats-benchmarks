@@ -7,7 +7,7 @@ class Distribution(ABC):
     Class representing some probability distribution.
     """
 
-    def __init__(self, mu: np.ndarray[float], sigma: np.ndarray[float]) -> None:
+    def __init__(self, mu: float, sigma: float) -> None:
         """
         This method initializes the distribution.
 

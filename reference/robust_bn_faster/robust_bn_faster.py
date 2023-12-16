@@ -46,7 +46,7 @@ class CDGS20_PGDEstimatorPython(RobustMeanEstimator):
         return np.minimum(np.maximum(w - t, 0), cap)
 
     def _estimate(self, sample: np.ndarray, epsilon: float, **kwargs) -> np.ndarray:
-        (n, d), k = sample.shape, 1
+        n, d = sample.shape
         n_itr = kwargs.get("n_itr", 20)
         epsN = round(epsilon * n)
         step_size = 1 / n
