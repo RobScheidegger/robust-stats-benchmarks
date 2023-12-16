@@ -4,7 +4,7 @@ from adversary import Adversary
 from distribution import Distribution
 from robust_mean_estimator import RobustMeanEstimator
 
-SAMPLE_COUNT = 2
+SAMPLE_COUNT = 1
 
 
 @dataclass

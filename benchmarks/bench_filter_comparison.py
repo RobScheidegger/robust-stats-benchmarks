@@ -12,8 +12,8 @@ from estimators import (
 from distributions import GaussianDistribution
 from adversaries import SwapAdversary
 
-D = 20
-EPSILON = 0.2
+D = 500
+EPSILON = 0.1
 K = 5
 N = int(K * D / (EPSILON**2))
 NUM_REPETITIONS = 1

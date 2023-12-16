@@ -14,5 +14,6 @@ from reference.robust_filter_2018.filter_2018_mean import (
 
 from reference.robust_bn_faster.robust_bn_faster import (
     CDGS20_PGDEstimator,
+    CDGS20_PGDEstimatorPython,
     DKKLMS16_FilterEstimator,
 )

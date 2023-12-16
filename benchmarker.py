@@ -2,7 +2,7 @@ import time
 from typing import Callable
 import numpy as np
 
-WARMUP_EXECUTIONS = 2
+WARMUP_EXECUTIONS = 0
 REPETITIONS = 1
 PRINT_COLUMN_WIDTH = 25
 

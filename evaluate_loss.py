@@ -10,9 +10,9 @@ import numpy as np
 
 
 def main():
-    d_options: list[int] = [5, 10, 15, 20, 25, 30, 35, 40]
+    d_options: list[int] = [5, 10, 15, 20, 25]
     # n_options: list[int] = [100]
-    epsilon_options: list[int] = [0.05, 0.1, 0.2]
+    epsilon_options: list[int] = [0.05, 0.1]
 
     adversaries: list[Adversary] = [
         # NullAdversary,
@@ -22,15 +22,16 @@ def main():
 
     estimators: list[RobustMeanEstimator] = [
         # BaseEstimator,
-        MedianEstimator,
+        # MedianEstimator,
         # RANSACEstimator,
         # GeoMedianEstimator,
         # PruningEstimator,
-        Filter2018PythonEstimator,
+        # Filter2018PythonEstimator,
         # Filter2018MATLABEstimator,
-        CDGS20_PGDEstimator,
+        # CDGS20_PGDEstimator,
+        CDGS20_PGDEstimatorPython,
         # DKKLMS16_FilterEstimator,
-        HeuristicRustEstimator,
+        # HeuristicRustEstimator,
         # FilterRustEstimator,
     ]
 
