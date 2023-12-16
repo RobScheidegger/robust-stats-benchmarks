@@ -1,5 +1,5 @@
 """
-This file contains python implementations of the RANSAC algorithm for mean estimation, as adapted from the 
+This file contains python implementations of the RANSAC algorithm for mean estimation, as adapted from the
 comparison code here:
 
 https://github.com/hoonose/robust-filter/blob/master/comparisonCode/ransacGaussianMean.m
@@ -44,7 +44,7 @@ class RANSACEstimator(RobustMeanEstimator):
                 best_inliers += 1
 
         for i in range(num_iters):
-            ransac_data = sample[np.random.choice(n, ransacN, replace=False)]
+            ransac_data = sample[np.random.choice(n, int(ransacN), replace=False)]
             ransac_mean = np.mean(ransac_data, axis=0)
             cur_inliers = 0
             for j in range(n):

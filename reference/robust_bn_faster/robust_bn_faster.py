@@ -1,6 +1,7 @@
 import numpy as np
 import matlab.engine
 
+from tqdm import tqdm
 from robust_mean_estimator import RobustMeanEstimator
 
 
@@ -46,18 +47,18 @@ class CDGS20_PGDEstimatorPython(RobustMeanEstimator):
 
     def _estimate(self, sample: np.ndarray, epsilon: float, **kwargs) -> np.ndarray:
         (n, d), k = sample.shape, 1
-        n_itr = kwargs.get("n_itr", 100)
+        n_itr = kwargs.get("n_itr", 20)
         epsN = round(epsilon * n)
         step_size = 1 / n
         w = np.ones(n) / n
 
         for _ in range(n_itr):
             Xw = sample.T @ w
-            Sigma_w = (X.T @ np.diag(w) @ sample) - np.outer(Xw, Xw)
+            Sigma_w = (sample.T @ np.diag(w) @ sample) - np.outer(Xw, Xw)
 
             u_val, u = np.linalg.eigh(Sigma_w)
-            u_val = u_val[0]
-            u = u[:, 0]
+            u_val = u_val[-1]
+            u = u[:, -1]
             Xu = sample @ u
             nabla_f_u = Xu * Xu - (2 * np.inner(u, Xw)) * Xu
             w = w - step_size * nabla_f_u / np.linalg.norm(nabla_f_u)

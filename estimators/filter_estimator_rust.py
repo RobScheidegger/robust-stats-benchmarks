@@ -1,6 +1,6 @@
 import numpy as np
 from robust_mean_estimator import RobustMeanEstimator
-from robust_stats import robust_mean_filter
+from robust_stats.robust_stats import robust_mean_filter
 
 
 class FilterRustEstimator(RobustMeanEstimator):
