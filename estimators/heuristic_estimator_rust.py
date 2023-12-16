@@ -1,6 +1,6 @@
 import numpy as np
 from robust_mean_estimator import RobustMeanEstimator
-from robust_stats import robust_mean_heuristic
+from robust_stats import robust_mean
 
 
 class HeuristicRustEstimator(RobustMeanEstimator):
@@ -9,4 +9,4 @@ class HeuristicRustEstimator(RobustMeanEstimator):
     """
 
     def _estimate(self, samples: np.ndarray, epsilon: float) -> np.ndarray:
-        return robust_mean_heuristic(samples, epsilon)
+        return robust_mean(samples, epsilon, method="heuristic")
